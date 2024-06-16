@@ -84,6 +84,7 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          password-stdin: true
 
       # Building and pushing the frontend image to the registry using an action
       - name: Build and push Docker Frontend images
