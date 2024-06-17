@@ -5,9 +5,7 @@ const App = () => {
   return (
     <div className="App">
       <header className=".App-header">
-        <h1>
-          Hello From <strong>Rasel</strong>{" "}
-        </h1>
+        <h1>Hello From Rasel</h1>
       </header>
     </div>
   );
