@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import ItemForm from "./components/ItemForm";
 import ItemList from "./components/ItemList";
 
@@ -18,8 +17,9 @@ const App = () => {
 
   const fetchShoppingItems = async () => {
     try {
-      const response = await axios.get(API_URL);
-      setShoppingItems(response.data);
+      const response = await fetch(API_URL);
+      const data = await response.json();
+      setShoppingItems(data);
       console.log(response.data);
     } catch (error) {
       console.error("Error fetching shopping items", error);
@@ -28,8 +28,18 @@ const App = () => {
 
   const addItem = async (item) => {
     try {
-      const response = await axios.post(API_URL, { item });
-      setShoppingItems([...shoppingItems, response.data]);
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ item }),
+      });
+      if (!response.ok) {
+        throw new Error("Response was not ok");
+      }
+      const data = await response.json();
+      setShoppingItems([...shoppingItems, data]);
     } catch (error) {
       console.error("Error adding shopping item", error);
     }
@@ -37,11 +47,19 @@ const App = () => {
 
   const updateItem = async (item) => {
     try {
-      const response = await axios.put(`${API_URL}/${item.id}`, {
-        item: item.item,
+      const response = await fetch(`${API_URL}/${item.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ item }),
       });
+      if (!response.ok) {
+        throw new Error("Response was not ok");
+      }
+      const data = await response.json();
       const updatedItems = shoppingItems.map((i) =>
-        i.id === item.id ? response.data : i
+        i.id === item.id ? data : i
       );
       setShoppingItems(updatedItems);
       setEditItem({ id: "", item: "" });
@@ -52,7 +70,7 @@ const App = () => {
 
   const deleteItem = async (id) => {
     try {
-      await axios.delete(`${API_URL}/${id}`);
+      await fetch(`${API_URL}/${id}`);
       const updatedItems = shoppingItems.filter((i) => i.id !== id);
       setShoppingItems(updatedItems);
     } catch (error) {
@@ -60,27 +78,24 @@ const App = () => {
     }
   };
 
-  const handleEdit = (item) =>{
+  const handleEdit = (item) => {
     setEditItem(item);
-  }
+  };
   return (
     <div className="App container">
-      <div
-      className="container d-flex flex-column w-60 align-item-center shopping-list"
-      >
+      <div className="container d-flex flex-column w-60 align-item-center shopping-list">
         <h1>Shopping List</h1>
-        <ItemForm addItem={addItem} 
-        editItem={editItem}
+        <ItemForm
+          addItem={addItem}
+          editItem={editItem}
           setEditItem={setEditItem}
           updateItem={updateItem}
-        
         />
         <ItemList
-        items={shoppingItems}
-        handleEdit={handleEdit}
-        handleeDelete={deleteItem}
+          items={shoppingItems}
+          handleEdit={handleEdit}
+          handleeDelete={deleteItem}
         />
-
       </div>
     </div>
   );
