@@ -20,7 +20,7 @@ const App = () => {
       const response = await fetch(API_URL);
       const data = await response.json();
       setShoppingItems(data);
-      console.log(response.data);
+      console.log(data);
     } catch (error) {
       console.error("Error fetching shopping items", error);
     }
@@ -52,7 +52,7 @@ const App = () => {
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify({ item }),
+        body: JSON.stringify({ item: item.item }),
       });
       if (!response.ok) {
         throw new Error("Response was not ok");
@@ -70,7 +70,12 @@ const App = () => {
 
   const deleteItem = async (id) => {
     try {
-      await fetch(`${API_URL}/${id}`);
+     const response = await fetch(`${API_URL}/${id}`, {
+      method: 'DELETE'
+     });
+     if (!response.ok) {
+      throw new Error('Response was not ok');
+     }
       const updatedItems = shoppingItems.filter((i) => i.id !== id);
       setShoppingItems(updatedItems);
     } catch (error) {
@@ -94,7 +99,7 @@ const App = () => {
         <ItemList
           items={shoppingItems}
           handleEdit={handleEdit}
-          handleeDelete={deleteItem}
+          handleDelete={deleteItem}
         />
       </div>
     </div>

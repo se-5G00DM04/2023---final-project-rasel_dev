@@ -1,5 +1,5 @@
 import React from "react";
-import {format} from "date-fns";
+import { format } from "date-fns";
 
 const ItemList = ({ items, handleEdit, handleDelete }) => {
   return (
@@ -16,15 +16,23 @@ const ItemList = ({ items, handleEdit, handleDelete }) => {
               <div className="d-flex gap-2 w-100 justify-content-between">
                 <div className="d-flex flex-column">
                   <h5>{item.item}</h5>
-                  <p className="text-muted mb-0" >
-                    
-                      {format(item.createdAt, "dd MMM, HH:mm")}
-                    
+                  <p className="text-muted mb-0">
+                    {format(new Date(item.createdAt), "dd MMM, HH:mm")}
                   </p>
                 </div>
                 <div className="d-flex align-item-center mb-0 ">
-                  <button className="btn btn-primary me-2" onClick={() => handleEdit}>Edit</button>
-                  <button className="btn btn-danger" onClick={() => handleDelete}>Delete</button>
+                  <button
+                    className="btn btn-primary me-2"
+                    onClick={() => handleEdit(item)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             </div>

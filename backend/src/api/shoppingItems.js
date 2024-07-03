@@ -67,7 +67,7 @@ router.put('/:id', (req, res) => {
   }
   const index = ITEMS.findIndex((i) => i.id === parseInt(id, 10));
   if (index === -1) {
-    return res.status(404).json({ error: 'Item not gfound' });
+    return res.status(404).json({ error: 'Item not found' });
   }
   ITEMS[index].item = item;
   return res.json(ITEMS[index]);
@@ -77,7 +77,7 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
-  const index = ITEMS.findIndex((i) => i.id = parseInt(id, 10));
+  const index = ITEMS.findIndex((i) => i.id === parseInt(id, 10));
   if (index === -1) {
     return res.status(404).json({ error: 'Item not gfound' });
   }
